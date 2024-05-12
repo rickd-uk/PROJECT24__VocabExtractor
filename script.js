@@ -58,6 +58,7 @@ function toggleStudyList(word) {
     studyList = studyList.filter((w) => w !== word);
   } else {
     studyList.push(word);
+    document.querySelector(`li[onclick="toggleStudyList('${word}')"]`).remove();
   }
 }
 
