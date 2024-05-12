@@ -43,12 +43,15 @@ function extractVocabulary() {
       const outputDiv = document.getElementById('outputDiv');
       outputDiv.innerHTML = '';
       document.getElementById('extractVocabBtn').style.display = 'none';
+      document.getElementById('cancelExtractBtn').style.display =
+        'inline-block';
 
       if (uncommonWords.length == 0) {
         outputDiv.innerHTML = '<p>No  words of interest were found.</p>';
         document.getElementById('saveStudyListBtn').style.display = 'none';
         document.getElementById('extractVocabBtn').style.display =
           'inline-block';
+        document.getElementById('cancelExtractBtn').style.display = 'none';
       } else {
         wordsToRemoveList = [];
         outputDiv.innerHTML =
@@ -125,10 +128,19 @@ function saveStudyList() {
       document.getElementById('outputDiv').innerHTML = '';
       document.getElementById('saveStudyListBtn').style.display = 'none';
       document.getElementById('extractVocabBtn').style.display = 'inline-block';
+      document.getElementById('cancelExtractBtn').style.display = 'none';
     })
     .catch((err) => console.error(err));
 }
 
 function clearTextBox() {
   document.getElementById('textInput').value = '';
+}
+
+function cancelExtract() {
+  wordsToRemoveList = [];
+  document.getElementById('outputDiv').innerHTML = '';
+  document.getElementById('saveStudyListBtn').style.display = 'none';
+  document.getElementById('extractVocabBtn').style.display = 'inline-block';
+  document.getElementById('cancelExtractBtn').style.display = 'none';
 }

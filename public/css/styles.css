@@ -54,6 +54,7 @@ button {
     /* Allow button to expand or shrink based on content */
     width: auto;
     height: auto;
+    margin-left: 15px;
 }
 
 
