@@ -1,13 +1,2 @@
-
-
-news
-mike
-hello
-
-party
-likes
-score
-points
-vote
-jury
-gain
+same
+error

@@ -9,16 +9,16 @@ const data_dir = "data";
 
 function extractVocabulary() {
   const inputText = document.getElementById("textInput").value;
-  const stopWordsFile = data_dir + "/stop_words.txt";
+  const studyListFile = data_dir + "/study_list.txt";
   const commonWordsFile = data_dir + "/common_words.txt";
   const knownWordsFile = data_dir + "/known_words.txt";
 
   Promise.all([
-    loadWordsFromFile(stopWordsFile),
+    loadWordsFromFile(studyListFile),
     loadWordsFromFile(commonWordsFile),
     loadWordsFromFile(knownWordsFile),
   ])
-    .then(([stopWords, commonWords, knownWords]) => {
+    .then(([studyListWords, commonWords, knownWords]) => {
       const wordList = inputText
         .replace(/[^a-zA-Z\s]/g, "")
         .toLowerCase()
@@ -26,7 +26,7 @@ function extractVocabulary() {
 
       const uncommonWords = wordList.filter(
         (word) =>
-          !stopWords.includes(word) &&
+          !studyListWords.includes(word) &&
           !commonWords.includes(word) &&
           !knownWords.includes(word) &&
           word.length > 3,
@@ -36,7 +36,7 @@ function extractVocabulary() {
       outputDiv.innerHTML = "";
 
       if (uncommonWords.length == 0) {
-        outputDiv.innerHTML = "<p>No uncommon words were found.</p>";
+        outputDiv.innerHTML = "<p>No  words of interest were found.</p>";
         document.getElementById("saveStudyListBtn").style.display = "none";
       } else {
         studyList = [];
@@ -45,7 +45,7 @@ function extractVocabulary() {
           uncommonWords
             .map(
               (word) =>
-                `<li class="word" onclick="toggleStudyList('${word}')">${word}</li>`,
+                `<li class="word" onclick="removeFromStudyList('${word}')">${word}</li>`,
             )
             .join("") +
           "</ul>";
@@ -56,12 +56,14 @@ function extractVocabulary() {
     .catch((err) => console.error(err));
 }
 
-function toggleStudyList(word) {
+function removeFromStudyList(word) {
   if (studyList.includes(word)) {
     studyList = studyList.filter((w) => w !== word);
   } else {
     studyList.push(word);
-    document.querySelector(`li[onclick="toggleStudyList('${word}')"]`).remove();
+    document
+      .querySelector(`li[onclick="removeFromStudyList('${word}')"]`)
+      .remove();
   }
 }
 
