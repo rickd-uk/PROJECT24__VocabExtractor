@@ -4,6 +4,10 @@ function loadWordsFromFile(filePath) {
     .then((text) => text.split(/\s+/));
 }
 
+function removeDuplicates(arr) {
+  return [...new Set(arr)];
+}
+
 let wordsToRemoveList = [];
 const data_dir = 'data';
 
@@ -21,10 +25,12 @@ function extractVocabulary() {
     loadWordsFromFile(knownWordsFile),
   ])
     .then(([studyListWords, commonWords, knownWords]) => {
-      const wordList = inputText
-        .replace(/[^a-zA-Z\s]/g, '')
-        .toLowerCase()
-        .split(/\s+/);
+      const wordList = removeDuplicates(
+        inputText
+          .replace(/[^a-zA-Z\s]/g, '')
+          .toLowerCase()
+          .split(/\s+/)
+      );
 
       const uncommonWords = wordList.filter(
         (word) =>
