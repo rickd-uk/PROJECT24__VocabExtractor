@@ -4,7 +4,7 @@ function loadWordsFromFile(filePath) {
     .then((text) => text.split(/\s+/));
 }
 
-let studyList = [];
+let wordsToRemoveList = [];
 const data_dir = "data";
 
 function extractVocabulary() {
@@ -39,9 +39,9 @@ function extractVocabulary() {
         outputDiv.innerHTML = "<p>No  words of interest were found.</p>";
         document.getElementById("saveStudyListBtn").style.display = "none";
       } else {
-        studyList = [];
+        wordsToRemoveList = [];
         outputDiv.innerHTML =
-          "<h2>Uncommon Words:</h2><ul>" +
+          "<h2>Click to remove any words:</h2><ul>" +
           uncommonWords
             .map(
               (word) =>
@@ -57,13 +57,19 @@ function extractVocabulary() {
 }
 
 function removeFromStudyList(word) {
-  if (studyList.includes(word)) {
-    studyList = studyList.filter((w) => w !== word);
+  if (wordsToRemoveList.includes(word)) {
+    wordsToRemoveList = wordsToRemoveList.filter((w) => w !== word);
   } else {
-    studyList.push(word);
+    wordsToRemoveList.push(word);
     document
       .querySelector(`li[onclick="removeFromStudyList('${word}')"]`)
       .remove();
+  }
+  console.log(wordsToRemoveList.length);
+  console.log(wordsToRemoveList);
+  if (wordsToRemoveList.length == 0) {
+    document.getElementById("saveStudyListBtn").style.display = "none";
+    document.getElementById("outputDiv").innerHTML = "";
   }
 }
 
@@ -71,7 +77,7 @@ function saveStudyList() {
   console.log("Save Study List button clicked");
   const knownWordsFile = "known_words.txt";
   const studyListFile = "study_list.txt";
-  const knownWordsToSave = studyList.join("\n");
+  const knownWordsToSave = wordsToRemoveList.join("\n");
 
   const remainingWords = Array.from(
     document.querySelectorAll("#outputDiv li"),
@@ -100,12 +106,12 @@ function saveStudyList() {
     .then(([knownWordsData, studyListData]) => {
       console.log("Server response (known words):", knownWordsData);
       console.log("Server response (study list):", studyListData);
-      const studyListDiv = document.getElementById("studyListDiv");
-      studyListDiv.innerHTML =
-        "<h2>Study List saved to study_list.txt</h2><ul>" +
-        remainingWords.map((word) => `<li>${word}</li>`).join("") +
-        "</ul>";
-      studyList = [];
+      // const studyListDiv = document.getElementById("studyListDiv");
+      // studyListDiv.innerHTML =
+      //   "<h2>Study List saved to study_list.txt</h2><ul>" +
+      //   remainingWords.map((word) => `<li>${word}</li>`).join("") +
+      //   "</ul>";
+      wordsToRemoveList = [];
       document.getElementById("outputDiv").innerHTML = "";
       document.getElementById("saveStudyListBtn").style.display = "none";
     })

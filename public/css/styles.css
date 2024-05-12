@@ -3,4 +3,10 @@
   color: blue;
   text-decoration: none;
   list-style-type: none;
+
+}
+
+#textInput {
+  width: 700px;
+  height: 400px;
 }
