@@ -1,14 +1,17 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <title>Vocabulary Extractor</title>
-</head>
-<body>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
     <h1>Vocabulary Extractor</h1>
     <textarea id="textInput" placeholder="Enter your text here..."></textarea>
     <button onclick="extractVocabulary()">Extract Vocabulary</button>
     <div id="outputDiv"></div>
+    <button id="savesStudyListBtn" disabled>Save Study List</button>
+    <div id="studyListDiv"></div>
 
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
