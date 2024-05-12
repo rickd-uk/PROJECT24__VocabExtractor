@@ -41,14 +41,14 @@ function extractVocabulary() {
       } else {
         wordsToRemoveList = [];
         outputDiv.innerHTML =
-          "<h2>Click to remove any words:</h2><ul>" +
+          '<h2>Click to remove any words:</h2><div class="word-container">' +
           uncommonWords
             .map(
               (word) =>
-                `<li class="word" onclick="removeFromStudyList('${word}')">${word}</li>`,
+                `<span class="word" onclick="removeFromStudyList('${word}')">${word}</span>`,
             )
             .join("") +
-          "</ul>";
+          "</div>";
         document.getElementById("saveStudyListBtn").style.display =
           "inline-block";
       }
@@ -61,9 +61,12 @@ function removeFromStudyList(word) {
     wordsToRemoveList = wordsToRemoveList.filter((w) => w !== word);
   } else {
     wordsToRemoveList.push(word);
-    document
-      .querySelector(`li[onclick="removeFromStudyList('${word}')"]`)
-      .remove();
+    const wordElement = document.querySelector(
+      `span.word[onclick="removeFromStudyList('${word}')"]`,
+    );
+    if (wordElement) {
+      wordElement.remove();
+    }
   }
   console.log(wordsToRemoveList.length);
   console.log(wordsToRemoveList);
@@ -80,8 +83,8 @@ function saveStudyList() {
   const knownWordsToSave = wordsToRemoveList.join("\n");
 
   const remainingWords = Array.from(
-    document.querySelectorAll("#outputDiv li"),
-  ).map((li) => li.textContent);
+    document.querySelectorAll("#outputDiv .word"),
+  ).map((span) => span.textContent);
   const studyListToSave = remainingWords.join("\n");
 
   Promise.all([

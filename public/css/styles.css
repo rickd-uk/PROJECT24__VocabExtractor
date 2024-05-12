@@ -1,12 +1,25 @@
-.word {
-  cursor: pointer;
-  color: blue;
-  text-decoration: none;
-  list-style-type: none;
-
+#outputDiv {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-gap: 10px;
+  margin-top: 20px;
 }
 
-#textInput {
-  width: 700px;
-  height: 400px;
+.word {
+  padding: 5px 10px;
+  background-color: #f4f4f4;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.word:hover {
+  background-color: #e0e0e0;
+}
+
+.word-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-gap: 10px;
+  margin-top: 20px;
 }
