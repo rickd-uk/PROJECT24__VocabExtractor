@@ -7,21 +7,28 @@
   </head>
   <body>
     <h1>Vocabulary Extractor</h1>
-    <textarea id="textInput" placeholder="Enter your text here..."></textarea>
-    <br>
-<div>
+    <div class="textarea-container">
+      <textarea id="textInput" placeholder="Enter your text here..."></textarea>
+    </div>
+   
+<div class="output">
 
-    <button onclick="extractVocabulary()">Extract Vocabulary</button>
-    <div id="outputDiv"></div>
+  <div class="controls">
+    <button id="clearTextBoxBtn" onclick="clearTextBox()">Clear</button>
+    <button id="extractVocabBtn" onclick="extractVocabulary()">Extract Vocabulary</button>
     <button
-      id="saveStudyListBtn"
-      onclick="saveStudyList()"
-      style="display: none"
-    >
-      Save Study List
-    </button>
+    id="saveStudyListBtn"
+    onclick="saveStudyList()"
+    style="display: none"
+  >
+    Save Study List
+  </button>
+  </div>
+  
+    <div id="outputDiv"></div>
+    
     <div id="studyListDiv"></div>
-</div>
+    </div>
     
     <script src="js/script.js"></script>
   </body>
