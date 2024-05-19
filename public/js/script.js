@@ -66,6 +66,12 @@ const data_dir = "data";
 
 function extractVocabulary() {
   const inputText = document.getElementById("textInput").value;
+  if (inputText === "") {
+    const outputDiv = document.getElementById("outputDiv");
+    outputDiv.innerHTML =
+      "<p>Please enter some text to extract vocabulary from.</p>";
+    return;
+  }
   const studyListFile = data_dir + "/study_list.txt";
   const commonWordsFile = data_dir + "/common_words.txt";
   const knownWordsFile = data_dir + "/known_words.txt";
