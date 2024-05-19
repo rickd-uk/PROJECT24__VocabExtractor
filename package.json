@@ -1,7 +1,18 @@
 {
+  "name": "Vocab Extractor",
+  "version": "0.1",
+  "description": "Extracts vocabulary from text to help study english",
+  "scripts": {
+    "start": "node src/server.js",
+    "start:prod": "PORT=$PORT node src/server.js",
+     "stop": "cross-env killall node"
+  },
   "dependencies": {
     "body-parser": "^1.20.2",
     "express": "^4.19.2",
     "fs": "^0.0.1-security"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }
