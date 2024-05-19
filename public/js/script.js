@@ -64,14 +64,45 @@ function updateWordList(
 let wordsToRemoveList = [];
 const data_dir = "data";
 
+let lastInputText = "";
+let lastUncommonWords = [];
+
 function extractVocabulary() {
-  const inputText = document.getElementById("textInput").value;
+  const inputText = document.getElementById("textInput").value.trim();
+
   if (inputText === "") {
     const outputDiv = document.getElementById("outputDiv");
     outputDiv.innerHTML =
       "<p>Please enter some text to extract vocabulary from.</p>";
     return;
   }
+
+  if (inputText === lastInputText) {
+    const outputDiv = document.getElementById("outputDiv");
+    outputDiv.innerHTML = "";
+    document.getElementById("extractVocabBtn").style.display = "none";
+    document.getElementById("cancelExtractBtn").style.display = "inline-block";
+
+    if (lastUncommonWords.length === 0) {
+      outputDiv.innerHTML = "<p>No words of interest were found.</p>";
+      document.getElementById("saveStudyListBtn").style.display = "none";
+      document.getElementById("extractVocabBtn").style.display = "inline-block";
+      document.getElementById("cancelExtractBtn").style.display = "none";
+    } else {
+      wordsToRemoveList = [];
+      outputDiv.innerHTML =
+        lastUncommonWords
+          .map(
+            (word) =>
+              `<span class="word" onclick="removeFromStudyList('${word}');">${word}</span>`,
+          )
+          .join("") + "</div>";
+      document.getElementById("saveStudyListBtn").style.display =
+        "inline-block";
+    }
+    return;
+  }
+
   const studyListFile = data_dir + "/study_list.txt";
   const commonWordsFile = data_dir + "/common_words.txt";
   const knownWordsFile = data_dir + "/known_words.txt";
@@ -123,6 +154,9 @@ function extractVocabulary() {
             (includeValidWords ? validWords.has(word) : true) &&
             word.length > 3,
         );
+
+        lastInputText = inputText;
+        lastUncommonWords = uncommonWords;
 
         const outputDiv = document.getElementById("outputDiv");
         outputDiv.innerHTML = "";
