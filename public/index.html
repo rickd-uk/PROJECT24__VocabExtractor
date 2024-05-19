@@ -10,27 +10,45 @@
     <div class="textarea-container">
       <textarea id="textInput" placeholder="Enter your text here..."></textarea>
     </div>
-   
-<div class="output">
 
-  <div class="controls">
-    <button id="clearTextBoxBtn" onclick="clearTextBox()">Clear</button>
-    <button id="extractVocabBtn" onclick="extractVocabulary()">Extract Vocabulary</button>
-    <button id="cancelExtractBtn" onclick="cancelExtract()" style="display: none">Cancel</button>
-    <button
-    id="saveStudyListBtn"
-    onclick="saveStudyList()"
-    style="display: none"
-  >
-    Save Study List
-  </button>
-  </div>
-  
-    <div id="outputDiv"></div>
-    
-    <div id="studyListDiv"></div>
+    <div class="output">
+      <div class="checkbox-container">
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeValidWords" checked />
+          <label for="includeValidWords">Include Valid Words (370k)</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeOxfordWords" checked />
+          <label for="includeOxfordWords">Include Oxford 5000 Words</label>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="clearTextBoxBtn" onclick="clearTextBox()">Clear</button>
+        <button id="extractVocabBtn" onclick="extractVocabulary()">
+          Extract Vocabulary
+        </button>
+        <button
+          id="cancelExtractBtn"
+          onclick="cancelExtract()"
+          style="display: none"
+        >
+          Cancel
+        </button>
+        <button
+          id="saveStudyListBtn"
+          onclick="saveStudyList()"
+          style="display: none"
+        >
+          Save Study List
+        </button>
+      </div>
+
+      <div id="outputDiv"></div>
+
+      <div id="studyListDiv"></div>
     </div>
-    
+
     <script src="js/script.js"></script>
   </body>
 </html>

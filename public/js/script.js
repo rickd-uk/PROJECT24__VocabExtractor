@@ -1,3 +1,9 @@
+function loadOxfordWords(filePath) {
+  return fetch(filePath)
+    .then((res) => res.text())
+    .then((text) => new Set(text.split(/\s+/)));
+}
+
 function loadWordList(filePath) {
   return fetch(filePath)
     .then((res) => res.text())
@@ -23,6 +29,9 @@ function extractVocabulary() {
   const commonWordsFile = data_dir + "/common_words.txt";
   const knownWordsFile = data_dir + "/known_words.txt";
   const validWordsFile = data_dir + "/words_370k.txt";
+  const oxfordWordsFile = data_dir + "/oxford_5000_words.txt";
+  const includeOxfordWords =
+    document.getElementById("includeOxfordWords").checked;
 
   document.getElementById("saveStudyListBtn").style.display = "inline-block";
 
@@ -30,47 +39,53 @@ function extractVocabulary() {
     loadWordsFromFile(studyListFile),
     loadWordsFromFile(commonWordsFile),
     loadWordsFromFile(knownWordsFile),
+    includeOxfordWords
+      ? loadOxfordWords(oxfordWordsFile)
+      : Promise.resolve(new Set()),
     loadWordList(validWordsFile),
   ])
-    .then(([studyListWords, commonWords, knownWords, validWords]) => {
-      const wordList = removeDuplicates(
-        inputText
-          .replace(/[^a-zA-Z\s]/g, "")
-          .toLowerCase()
-          .split(/\s+/),
-      ).filter((word) => validWords.has(word));
+    .then(
+      ([studyListWords, commonWords, knownWords, oxfordWords, validWords]) => {
+        const wordList = removeDuplicates(
+          inputText
+            .replace(/[^a-zA-Z\s]/g, "")
+            .toLowerCase()
+            .split(/\s+/),
+        ).filter((word) => validWords.has(word));
 
-      const uncommonWords = wordList.filter(
-        (word) =>
-          !studyListWords.includes(word) &&
-          !commonWords.includes(word) &&
-          !knownWords.includes(word) &&
-          word.length > 3,
-      );
+        const uncommonWords = wordList.filter(
+          (word) =>
+            !studyListWords.includes(word) &&
+            !commonWords.includes(word) &&
+            !knownWords.includes(word) &&
+            (includeOxfordWords ? oxfordWords.has(word) : true) &&
+            word.length > 3,
+        );
 
-      const outputDiv = document.getElementById("outputDiv");
-      outputDiv.innerHTML = "";
-      document.getElementById("extractVocabBtn").style.display = "none";
-      document.getElementById("cancelExtractBtn").style.display =
-        "inline-block";
-
-      if (uncommonWords.length == 0) {
-        outputDiv.innerHTML = "<p>No  words of interest were found.</p>";
-        document.getElementById("saveStudyListBtn").style.display = "none";
-        document.getElementById("extractVocabBtn").style.display =
+        const outputDiv = document.getElementById("outputDiv");
+        outputDiv.innerHTML = "";
+        document.getElementById("extractVocabBtn").style.display = "none";
+        document.getElementById("cancelExtractBtn").style.display =
           "inline-block";
-        document.getElementById("cancelExtractBtn").style.display = "none";
-      } else {
-        wordsToRemoveList = [];
-        outputDiv.innerHTML =
-          uncommonWords
-            .map(
-              (word) =>
-                `<span class="word" onclick="removeFromStudyList('${word}')">${word}</span>`,
-            )
-            .join("") + "</div>";
-      }
-    })
+
+        if (uncommonWords.length == 0) {
+          outputDiv.innerHTML = "<p>No  words of interest were found.</p>";
+          document.getElementById("saveStudyListBtn").style.display = "none";
+          document.getElementById("extractVocabBtn").style.display =
+            "inline-block";
+          document.getElementById("cancelExtractBtn").style.display = "none";
+        } else {
+          wordsToRemoveList = [];
+          outputDiv.innerHTML =
+            uncommonWords
+              .map(
+                (word) =>
+                  `<span class="word" onclick="removeFromStudyList('${word}')">${word}</span>`,
+              )
+              .join("") + "</div>";
+        }
+      },
+    )
     .catch((err) => console.error(err));
 }
 
@@ -91,18 +106,28 @@ function removeFromStudyList(word) {
   if (wordsToRemoveList.length == 0) {
     document.getElementById("saveStudyListBtn").style.display = "none";
     document.getElementById("outputDiv").innerHTML = "";
+  } else {
+    saveStudyList(oxfordWords, validWords);
   }
 }
 
-function saveStudyList() {
+function saveStudyList(oxfordWords, validWords) {
   console.log("Save Study List button clicked");
+  const includeOxfordWords =
+    document.getElementById("includeOxfordWords").checked;
+  const includeValidWords =
+    document.getElementById("includeValidWords").checked;
+
   const knownWordsFile = "known_words.txt";
   const studyListFile = "study_list.txt";
   const knownWordsToSave = wordsToRemoveList.join("\n");
 
   const remainingWords = Array.from(
     document.querySelectorAll("#outputDiv .word"),
-  ).map((span) => span.textContent);
+  )
+    .map((span) => span.textContent)
+    .filter((word) => (includeOxfordWords ? !oxfordWords.has(word) : true))
+    .filter((word) => (includeValidWords ? validWords.has(word) : true));
   const studyListToSave = remainingWords.join("\n");
 
   Promise.all([

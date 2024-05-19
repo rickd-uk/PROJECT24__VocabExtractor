@@ -56,7 +56,21 @@ button {
     height: auto;
     margin-left: 15px;
 }
+.checkbox-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
 
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.checkbox-item input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
 
 #saveStudyListBtn{
    justify-content: center;
