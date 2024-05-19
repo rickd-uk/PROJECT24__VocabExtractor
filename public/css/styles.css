@@ -25,6 +25,10 @@ h1 {
  
 }
 
+.word.removed {
+  text-decoration: line-through;
+  color: red;
+}
 
 #textInput {
   width: 100%;
@@ -76,13 +80,14 @@ button {
    justify-content: center;
 }
 .word {
-  padding: 5px 10px;
-  background-color: #f4f4f4;
+  display: inline-block;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  padding: 5px;
+  background-color: #f0f0f0;
   border-radius: 5px;
   cursor: pointer;
-  text-align: center;
 }
-
 .word:hover {
   background-color: #e0e0e0;
 }
